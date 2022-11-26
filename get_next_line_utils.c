@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:44:12 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/26 10:24:43 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/11/26 18:49:10 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@ size_t	ft_strlen(char *str)
 	while (str[i])
 		i++;
 	return (i);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	srclen;
+	char	*ptr;
+
+	srclen = ft_strlen((char *)s) + 1;
+	ptr = malloc(srclen * sizeof(char));
+	if (ptr == NULL)
+		return (0);
+	ft_strlcpy(ptr, s, srclen);
+	return (ptr);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)

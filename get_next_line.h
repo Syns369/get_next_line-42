@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:49:08 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/26 10:22:46 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/11/26 18:49:34 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	ft_bzero(void *s, size_t n);
+char	*get_next_line(int fd);
+char	*ft_strdup(const char *s);
 
 #endif
