@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:49:27 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/26 11:33:54 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/11/26 14:15:35 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ char	*get_next_line(int fd)
 	if (check_n(stash) >= 0)
 	{
 		line = get_line_n_stash(stash, stash, line);
+		free(buf);
 		return (line);
 	}
 	while (read(fd, buf, BUFFER_SIZE) > 0)
@@ -71,6 +72,8 @@ char	*get_next_line(int fd)
 		}
 		line = ft_strjoin(line, buf);
 	}
+	if (read(fd, buf, BUFFER_SIZE) == 0)
+		return (NULL);
 	free(buf);
 	return (line);
 }
@@ -78,11 +81,21 @@ char	*get_next_line(int fd)
 int	main(void)
 {
 	int		fd;
+	char	*line1;
+	char	*line2;
+	char	*line3;
 
 	fd = open("test.txt", O_RDONLY);
-	
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+	line1 = get_next_line(fd);
+	printf("%s", line1);
+	free(line1);
+	line2 = get_next_line(fd);
+	printf("%s", line2);
+	free(line2);
+	line3 = get_next_line(fd);
+	printf("%s", line3);
+	free(line3);
+	// printf("%s", get_next_line(fd));
 	// printf("%s", get_next_line(fd));
 	// printf("%s", get_next_line(fd));
 	// printf("%s", get_next_line(fd));
