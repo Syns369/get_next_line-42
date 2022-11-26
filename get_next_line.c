@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:49:27 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/25 03:42:26 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/11/26 11:33:54 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,49 +22,56 @@ int	check_n(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\n')
-			return (1);
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
-char	*get_line(char *stash)
+char	*get_line_n_stash(char *str, char *stash, char	*line)
 {
-	char	*line;
-	int		i;
+	char	*tmp;
 
-	i = 0;
-	while (stash[i] && stash[i] != '\n')
-		i++;
-	line = malloc(sizeof(char) * (i + 1));
-	if (!line)
-		return (NULL);
-	ft_strlcpy(line, stash, i + 2);
+	tmp = ft_substr(str, 0, check_n(str) + 1);
+	line = ft_strjoin(line, tmp);
+	// ft_bzero(stash, BUFFER_SIZE + 1);
+	ft_strlcpy(stash, str + check_n(str) + 1, BUFFER_SIZE + 1);
+	free(tmp);
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	stash[BUFFER_SIZE + 1] = {0};
 	char		*line;
 	char		*buf;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	line = malloc(sizeof(char));
+	if (!line)
 		return (NULL);
-	if (check_n(stash))
-		return (get_line(stash));
-	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	line[0] = '\0';
 	if (!buf)
 		return (NULL);
-	while (check_n(stash) == 0)
+	if (stash[0] != '\0' && check_n(stash) == -1)
+		line = ft_strjoin(line, stash);
+	if (check_n(stash) >= 0)
 	{
-		read(fd, buf, BUFFER_SIZE);
+		line = get_line_n_stash(stash, stash, line);
+		return (line);
+	}
+	while (read(fd, buf, BUFFER_SIZE) > 0)
+	{
 		buf[BUFFER_SIZE] = '\0';
-		stash = ft_strjoin(stash, buf);
+		if (check_n(buf) != -1)
+		{
+			line = get_line_n_stash(buf, stash, line);
+			free(buf);
+			return (line);
+		}
+		line = ft_strjoin(line, buf);
 	}
 	free(buf);
-	line = get_line(stash);
-	stash = ft_strdup(ft_strchr(stash, '\n') + 1);
 	return (line);
 }
 
@@ -73,11 +80,16 @@ int	main(void)
 	int		fd;
 
 	fd = open("test.txt", O_RDONLY);
+	
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
 	close(fd);
 	return (0);
 }

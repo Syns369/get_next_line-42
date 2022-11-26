@@ -6,13 +6,13 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:44:12 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/25 03:44:30 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/11/26 10:24:43 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *str)
+size_t	ft_strlen(char *str)
 {
 	int	i;
 
@@ -20,41 +20,6 @@ int	ft_strlen(char *str)
 	while (str[i])
 		i++;
 	return (i);
-}
-
-char	*ft_strdup(char *s1)
-{
-	char	*str;
-	int		i;
-
-	i = 0;
-	str = malloc(sizeof(char) * (ft_strlen(s1) + 1));
-	if (!str)
-		return (NULL);
-	while (s1[i])
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	str[i] = '\0';
-	// free(s1);
-	return (str);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (unsigned char)c)
-			return ((char *)s + i);
-		i++;
-	}
-	if (s[i] == (unsigned char)c)
-		return ((char *)s + i);
-	return (NULL);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
@@ -100,8 +65,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*str;
 	int		total_len;
 
-	if (!s1)
-		return (ft_strdup((char *)s2));
 	total_len = ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1;
 	str = malloc(sizeof(char) * (total_len));
 	if (!str)
@@ -111,4 +74,42 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	free((char *)s1);
 	// free((char *)s2);
 	return (str);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	char	*ptr;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	if (start > ft_strlen((char *)s))
+		return (malloc(sizeof(char)));
+	if (len > ft_strlen((char *)s + start))
+		len = ft_strlen((char *)s + start);
+	ptr = (char *)malloc((len + 1) * sizeof(char));
+	if (ptr == NULL)
+		return (0);
+	while (i < len)
+	{
+		ptr[i] = s[start + i];
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*dest;
+	size_t			i;
+
+	i = 0;
+	dest = s;
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
 }
