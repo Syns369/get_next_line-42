@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:49:27 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/26 22:14:48 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/11/30 02:45:14 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*get_line_n_stash(char *str, char *stash, char	*line)
 
 	tmp = ft_substr(str, 0, check_n(str) + 1);
 	line = ft_strjoin(line, tmp);
-	// ft_bzero(stash, BUFFER_SIZE + 1);
 	ft_strlcpy(stash, str + (check_n(str) + 1), ft_strlen(str) - check_n(str));
 	free(tmp);
 	return (line);
@@ -47,25 +46,25 @@ char	*get_next_line(int fd)
 	char		*buf;
 	int			ret;
 
-	// invalid fd
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	line = malloc(sizeof(char));
-	if (!line)
-		return (NULL);
-	line[0] = '\0';
+	line = ft_strdup("");
 	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	if (stash[0] != '\0' && check_n(stash) == -1)
-		line = ft_strjoin(line, stash);
 	if (check_n(stash) >= 0)
 	{
 		line = get_line_n_stash(stash, stash, line);
 		free(buf);
 		return (line);
 	}
+	line = ft_strjoin(line, stash);
+	ft_bzero(stash, BUFFER_SIZE + 1);
 	ret = read(fd, buf, BUFFER_SIZE);
+	if (ret == -1)
+	{
+		free(line);
+		free(buf);
+		return (NULL);
+	}
 	while (ret > 0)
 	{
 		buf[ret] = '\0';
