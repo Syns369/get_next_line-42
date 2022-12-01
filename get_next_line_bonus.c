@@ -6,11 +6,11 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 02:49:27 by jdarcour          #+#    #+#             */
-/*   Updated: 2022/11/30 23:22:15 by jdarcour         ###   ########.fr       */
+/*   Updated: 2022/12/01 20:37:43 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -84,7 +84,7 @@ char	*ft_read(char *line, char *stash, char *buf, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	stash[BUFFER_SIZE + 1];
+	static char	stash[1024][BUFFER_SIZE + 1];
 	char		*line;
 	char		*buf;
 
@@ -95,11 +95,11 @@ char	*get_next_line(int fd)
 	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	if (check_n(stash) >= 0)
-		return (get_line_n_stash(stash, stash, line, buf));
-	line = ft_strjoin(line, stash);
-	ft_bzero(stash, BUFFER_SIZE + 1);
-	return (ft_read(line, stash, buf, fd));
+	if (check_n(stash[fd]) >= 0)
+		return (get_line_n_stash(stash[fd], stash[fd], line, buf));
+	line = ft_strjoin(line, stash[fd]);
+	ft_bzero(stash[fd], BUFFER_SIZE + 1);
+	return (ft_read(line, stash[fd], buf, fd));
 }
 
 // int	main(void)
